@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "Kitt Autofill",
+  "description": "Emulate the chrome autofill functionality",
+  "version": "0.1.0",
+  "icons": {
+    "16": "img/icon.png",
+    "48": "img/icon.png",
+    "128": "img/icon.png"
+  },
+  "permissions": [
+    "storage", "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "html/popup.html"
+  },
+  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'"
+}

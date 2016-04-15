@@ -1,0 +1,35 @@
+{
+  "name": "kitt-autofill",
+  "version": "0.0.1",
+  "description": "Kitt autofill emulates chrome internal autofill",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "lodash": "^4.8.0"
+  },
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "brfs": "^1.4.0",
+    "browserify": "^10.2.4",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-cat": "^0.3.3",
+    "gulp-crx-pack": "^1.0.0",
+    "gulp-mocha": "^2.1.3",
+    "vinyl-source-stream": "^1.1.0",
+    "gulp-jshint": "^1.8.5"
+  },
+  "scripts": {
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "chrome",
+    "extension",
+    "autofill"
+  ],
+  "author": "Tomas Novella<tomasnovella@gmail.com>",
+  "license": "MIT"
+}
