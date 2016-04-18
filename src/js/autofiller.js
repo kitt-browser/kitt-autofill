@@ -5,9 +5,9 @@
 
 let $ = require('jquery');
 
-function autofillForms(forms) {
+function bindAutofilledValuesToForms(forms) {
   forms.forEach((form, key) => {
-    form.needsAutofill = key % 2 == 0;
+    form.needsAutofill = key % 2 === 1;
     if (form.needsAutofill) {
       form.elements.each(function() {
         $(this).data("autofillCandidates", ["candidate1", "candidate2"]);
@@ -18,5 +18,5 @@ function autofillForms(forms) {
 
 
 module.exports = {
-  autofillForms
+  bindAutofilledValuesToForms
 };

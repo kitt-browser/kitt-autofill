@@ -18,7 +18,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/content.js"]
+      "js": ["js/content.js"],
+      "css": ["css/jquery-ui.css"]
     }
   ],
   "browser_action": {

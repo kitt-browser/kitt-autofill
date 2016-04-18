@@ -55,6 +55,8 @@ gulp.task('html', () => {
 });
 
 gulp.task('css', () => {
+  return gulp.src('./src/css/*.css')
+    .pipe(gulp.dest('./'+ PATH +'/css'));
 });
 
 gulp.task('img', () => {

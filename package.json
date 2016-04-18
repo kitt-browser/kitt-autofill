@@ -4,6 +4,7 @@
   "description": "Kitt autofill emulates chrome internal autofill",
   "dependencies": {
     "jquery": "^2.1.4",
+    "jquery-ui": "^1.10.5",
     "lodash": "^4.8.0"
   },
   "devDependencies": {

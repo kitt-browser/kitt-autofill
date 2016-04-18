@@ -1,6 +1,8 @@
 "use strict";
 
 let $ = require('jquery');
+require('jquery-ui');
+
 let _ = require('lodash');
 let autofiller = require('./autofiller');
 
@@ -11,11 +13,10 @@ console.log('Content, chrome autofill!');
 // extractedFORMS = [FORM]
 // FORM = {ACTION, ELEMENTS}
 // ELEMENTS = [JQUERY ELEMENT]
-function extractForms() {
+function extractFormsFromCurrentPage() {
   return $("form").toArray().map((HTMLForm) => {
     let jqForm = $(HTMLForm);
     let elements = jqForm.find("input[type!='hidden'],textarea,select");
-    bindOnfocusElements(elements);
     return {
       action: jqForm.attr("action"),
       elements: elements
@@ -23,12 +24,13 @@ function extractForms() {
   });
 }
 
-function bindOnfocusElements(elements) {
-  elements.each(function(index) {
-    this.onfocus = () => {
-      console.log('onfocus:', this, index);
-      console.log('candidates:', $(this).data("autofillCandidates"));
-    };
+function bindListenersToElementsOfForms(forms) {
+  forms.forEach((form) => {
+    form.elements.each(function() {
+      $(this).autocomplete({
+        source: $(this).data("autofillCandidates")
+      });
+    });
   });
 }
 
@@ -41,10 +43,10 @@ function main(processMutation) {
   });
 }
 
-
 main(function(){
-  let forms = extractForms();
-  let autofilledForms = autofiller.autofillForms(forms);
+  let forms = extractFormsFromCurrentPage();
+  bindListenersToElementsOfForms(forms);
+  autofiller.bindAutofilledValuesToForms(forms);
 });
 
 window.autofiller = autofiller;
