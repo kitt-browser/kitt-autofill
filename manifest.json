@@ -18,10 +18,16 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/content.js"],
-      "css": ["css/jquery-ui.css"]
+      "js": ["js/content.js"]
     }
   ],
+
+  "readme": "jquery-ui.css is injected via content script, because Kitt doesn't support content_scripts.css directive",
+  "web_accessible_resources": [
+    "css/jquery-ui.css"
+  ],
+
+
   "browser_action": {
     "default_popup": "html/popup.html"
   },
