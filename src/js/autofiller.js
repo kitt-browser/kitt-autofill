@@ -20,8 +20,8 @@ function bindAutofilledValuesToForms(forms) {
   forms.forEach((form, key) => {
     form.needsAutofill = true; //key % 2 === 1;
     if (form.needsAutofill) {
-      form.elements.each(function() {
-        $(this).data("autofillCandidates", ["candidate1", "candidate2"]);
+      form.elements.forEach((elementStruct) => {
+        $(elementStruct.htmlElement).data("autofillCandidates", ["candidate1", "candidate2"]);
       });
     }
   });
