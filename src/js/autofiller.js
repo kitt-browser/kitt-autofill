@@ -21,7 +21,7 @@ function bindAutofilledValuesToForms(forms) {
     form.needsAutofill = true; //key % 2 === 1;
     if (form.needsAutofill) {
       form.elements.forEach((elementStruct) => {
-        $(elementStruct.htmlElement).data("autofillCandidates", ["candidate1", "candidate2"]);
+        $(elementStruct.domElement).data("autofillCandidates", ["candidate1", "candidate2"]);
       });
     }
   });

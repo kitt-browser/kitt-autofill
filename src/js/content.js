@@ -5,6 +5,9 @@ require('jquery-ui');
 
 var autofiller = require('./autofiller');
 
+var autofill_chrome = require('./lib/autofill_chrome');
+console.log(autofill_chrome.autofill.extractForms(1));
+
 // hack: Kitt doesn't support manifest.content_scripts[0].css
 let stylesheetUrl = chrome.extension.getURL('./css/jquery-ui.css');
 $('head').append('<link rel="stylesheet" type="text/css" href="' + stylesheetUrl + '">');
@@ -40,27 +43,42 @@ function throttle(func, timeout) {
 
 console.log('Content, chrome autofill!');
 
+function extractAttributesFromElement(domElement) {
+  let elementAttributes = {};
+  let atts = domElement.attributes;
+  for (let i = 0; i < atts.length; ++i) {
+    let att = atts[i];
+    elementAttributes[att.nodeName] = att.nodeValue
+  }
+  return elementAttributes;
+}
+
+function createElementsStructure(jqElements) {
+  return jqElements.map((index, domElement) => {
+    let elementAttributes = extractAttributesFromElement(domElement);
+    elementAttributes.domElement = domElement;
+    elementAttributes.id = Math.random().toString();
+
+    return elementAttributes;
+  }).get();
+}
+
 // Extractor
 // extractedFORMS = [FORM]
 // FORM = {ACTION, ELEMENTS}
 // ELEMENTS = [ELEMENT]
-// ELEMENT = {id:..., htmlElement:..., ....}
+// ELEMENT = {id:..., domElement:..., ....}
 function extractFormsFromCurrentPage() {
   let forms = $("form");
   if (forms.length > 5) { // I'm on a page like facebook -> many forms
     window.observer.disconnect();
   }
-  return forms.toArray().map((HTMLForm) => {
-    let jqForm = $(HTMLForm);
-    let elements = jqForm.find("input[type!='hidden'],textarea,select");
+  return forms.toArray().map((htmlForm) => {
+    let jqForm = $(htmlForm);
+    let jqElements = jqForm.find("input[type!='hidden'],textarea,select");
     let parsedForm = {
       action: jqForm.attr("action"),
-      elements: elements.map((index, DOMElement) => {
-        return {
-          htmlElement: DOMElement,
-          id: Math.random().toString()
-        };
-      }).get()
+      elements: createElementsStructure(jqElements)
     };
     console.log("parsing form: ", parsedForm);
     return parsedForm;
@@ -70,11 +88,11 @@ function extractFormsFromCurrentPage() {
 function bindListenersToElementsOfForms(forms) {
   forms.forEach((form) => {
     form.elements.forEach((elementStruct) => {
-      let htmlElement = elementStruct.htmlElement;
-      let jqElement = $(htmlElement);
+      let domElement = elementStruct.domElement;
+      let jqElement = $(domElement);
       jqElement.autocomplete({source: jqElement.data("autofillCandidates")});
 
-      htmlElement.onfocus = () => {
+      domElement.onfocus = () => {
         console.log("element was just focused, candidates:", jqElement.data("autofillCandidates"));
       };
     });
