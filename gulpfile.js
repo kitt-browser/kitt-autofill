@@ -38,7 +38,7 @@ gulp.task('mochaTest', () => {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(['package.json', '.jshintrc', 'gulpfile.js', 'src/**/*.js'])
+  return gulp.src(['package.json', '.jshintrc', 'gulpfile.js', 'src/**/*.js', '!src/js/lib/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default', { verbose: false }));
 });
