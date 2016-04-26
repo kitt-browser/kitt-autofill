@@ -1,5 +1,5 @@
 var __gCrWeb = {};
-
+module.exports = __gCrWeb;
 
 // core.js
 // Returns a string that is formatted according to the JSON syntax rules.
@@ -2818,5 +2818,3 @@ __gCrWeb.autofill['fillPredictionData'] = function(data) {
     }
   }
 };
-
-module.exports = __gCrWeb;
