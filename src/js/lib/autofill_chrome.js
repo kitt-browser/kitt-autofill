@@ -1384,7 +1384,7 @@ __gCrWeb.autofill['fillForm'] = function(data, forceFillFieldName) {
     // TODO(bondd): Handle __gCrWeb.autofill.isCheckableElement(element) ==
     // true. |is_checked| is not currently passed in by the caller.
 
-    element.setAttribute('chrome-autofilled');
+    element.setAttribute('chrome-autofilled', "autofilledPlaceholderValue");
     element.isAutofilled = true;
     element.addEventListener('input', controlElementInputListener);
   }
