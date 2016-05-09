@@ -19,7 +19,6 @@ const fieldTypes = [
   'nameOnCard',
   'cardNumber'
 ];
-const AUTOFILL_PROFILE_STORAGE_KEY = 'autofill_profile';
 
 function appendFieldWithDefaultValue(form, fieldName, fieldDefaultValue) {
   if (!form || !fieldName) {
@@ -40,11 +39,7 @@ function appendFieldWithDefaultValue(form, fieldName, fieldDefaultValue) {
 }
 
 function main() {
-  chrome.storage.local.get(AUTOFILL_PROFILE_STORAGE_KEY, function(profile) {
-
-    // profile must be a non-nullable object, I'm accessing it later
-    profile = profile[AUTOFILL_PROFILE_STORAGE_KEY]? profile[AUTOFILL_PROFILE_STORAGE_KEY] : {};
-
+  chrome.runtime.sendMessage({command: 'getAutofillProfile'}, (profile) => {
     let form = document.getElementById("autofillProfileForm");
     fieldTypes.forEach(field => {
       appendFieldWithDefaultValue(form, field, profile[field]);
@@ -61,11 +56,10 @@ function main() {
         autofillProfile[item.name] = item.value;
       });
 
-      let newStorage = {};
-      newStorage[AUTOFILL_PROFILE_STORAGE_KEY] = autofillProfile;
-      chrome.storage.local.set(newStorage, function() {
+      chrome.runtime.sendMessage({command: 'setAutofillProfile', profile: autofillProfile}, () => {
         window.close();
       });
+
     };
   });
 }

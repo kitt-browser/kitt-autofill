@@ -15,6 +15,29 @@ function setUpObserver(processMutation) {
   return observer;
 }
 
+function fillFormsWithAutofillProfile(extractedForms, profile) {
+  // @typedef {Array<AutofillFormResponseData>}
+  // AutofillFormResponseData := {
+  //   formName: string
+  //   fields: Object<{|fieldname|: |autofillFieldType|}>
+  // }
+  chrome.autofill.requestAutofillValues(extractedForms, function(autofillFormsResponseData) {
+    autofillFormsResponseData.forEach(function(formResponseData) {
+      for(let formFieldName in formResponseData.fields) {
+        if (formResponseData.fields.hasOwnProperty(formFieldName)) {
+          formResponseData.fields[formFieldName] = profile[formResponseData.fields[formFieldName]];
+        }
+      }
+      try {
+        autofillController.autofill.fillForm(formResponseData);
+      } catch(e) {
+        console.log('Autofilling failed for response', formResponseData, "error message", e);
+      }
+    });
+  });
+
+}
+
 setUpObserver(function() {
   let extractedForms = autofillController.autofill.extractForms(3);
 
@@ -23,20 +46,9 @@ setUpObserver(function() {
   if (!chrome.autofill) {
     return;
   }
-
-  // @typedef {Array<AutofillFormResponseData>}
-  // AutofillFormResponseData := {
-  //   formName: string
-  //   fields: Array<{name: |value|}>
-  // }
-  chrome.autofill.requestAutofillValues(extractedForms, function(autofillFormsResponseData) {
-    autofillFormsResponseData.forEach(function(formResponseData) {
-      try {
-        autofillController.autofill.fillForm(formResponseData);
-      } catch(e) {
-        console.log('Autofilling failed for response', formResponseData, "error message", e);
-      }
-    });
+  chrome.runtime.sendMessage({command: 'getAutofillProfile'}, (profile) => {
+    //alert(JSON.stringify(profile));
+    fillFormsWithAutofillProfile(extractedForms, profile);
   });
 });
 
