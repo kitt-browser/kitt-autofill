@@ -1,9 +1,3 @@
-let a = 42;
-
-console.log(a);
-
-window.autofiller = require('./autofiller');
-
 const AUTOFILL_PROFILE_STORAGE_KEY = 'autofill_profile';
 
 // Workaround: Kitt uses caching for chrome.storage so that we can get the fresh version of data only
