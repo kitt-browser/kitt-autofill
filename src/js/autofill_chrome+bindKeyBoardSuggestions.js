@@ -6,31 +6,25 @@
 let __gCrWeb = require('./lib/autofill_chrome');
 
 function fillValueListener(value) {
-  if (!chrome || !chrome.autofill || !chrome.autofill.setKeyboardInputSuggestions) {
+  if (!chrome.autofill) {
     return;
   }
 
   return function() {
-    alert(value);
-    if (!chrome.autofill.setKeyboardInputSuggestions) { // TODO
-      return;
-    }
-    chrome.autofill.setKeyboardSuggections([value]);
-  }
+    //alert((typeof chrome.autofill.setKeyboardInputSuggestions) + value);
+    chrome.autofill.setKeyboardInputSuggestions([value]);
+  };
 }
 
 function removeValueListener() {
-  if (!chrome || !chrome.autofill ) {
+  if (!chrome.autofill ) {
     return;
   }
 
   return function() {
-    alert('gonna be removed');
-    if (!chrome.autofill.clearKeyboardInputSuggestions) { // TODO
-      return;
-    }
+    //alert((typeof chrome.autofill.clearKeyboardInputSuggestions) + 'gonna be removed');
     chrome.autofill.clearKeyboardInputSuggestions();
-  }
+  };
 }
 
 __gCrWeb.autofill.bindKeyboardInputSuggestionsToForm = function(autofillFilledFormResponseData) {
